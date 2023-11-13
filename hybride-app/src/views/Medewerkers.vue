@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-title slot="start">Medewerkers</ion-title>
-        <ion-button slot="end" fill="clear" color="secondary">
+        <ion-button id="addMedewerkerBtn" slot="end" fill="clear" color="secondary">
           Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
         </ion-button>
       </ion-toolbar>
@@ -19,12 +19,34 @@
       <MedewerkerCard v-for="medewerker in medewerkers" :key="medewerker.mw_id" :Voornaam="medewerker.mw_voornaam"
         :Familienaam="medewerker.mw_familienaam" :Specialisatie="medewerker.sp_naam" :sp_id="medewerker.sp_id"
         :mw_id="medewerker.mw_id" />
+
+      <ion-modal ref="modal" trigger="addMedewerkerBtn" @willDismiss="onWillDismiss">
+        <ion-header>
+          <ion-toolbar>
+            <ion-buttons slot="start">
+              <ion-button @click="cancel()">Cancel</ion-button>
+            </ion-buttons>
+            <ion-title>Welcome</ion-title>
+            <ion-buttons slot="end">
+              <ion-button :strong="true" @click="confirm()">Confirm</ion-button>
+            </ion-buttons>
+          </ion-toolbar>
+        </ion-header>
+
+        <ion-content class="ion-padding">
+          <ion-item>
+            <ion-input label="Enter your name" label-placement="stacked" ref="input" type="text"
+              placeholder="Your name"></ion-input>
+          </ion-item>
+        </ion-content>
+      </ion-modal>
+
     </ion-content>
   </ion-page>
 </template>
 
 <script setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonButtons, onIonViewWillEnter } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, IonButtons, onIonViewWillEnter, IonModal, IonItem, IonInput } from '@ionic/vue';
 import { addCircleOutline } from 'ionicons/icons';
 import { ref, inject } from 'vue';
 import MedewerkerCard from '@/components/MedewerkerCard.vue';
@@ -55,4 +77,27 @@ const getMedewerkers = () => {
 onIonViewWillEnter(() => {
   getMedewerkers();
 });
+
+// const addProject = () => {
+//   console.log('Nieuw Project Click!')
+// }
+
+// modal
+const message = ref('This modal example uses triggers to automatically open a modal when the button is clicked.');
+
+const modal = ref();
+const input = ref();
+
+const cancel = () => modal.value.$el.dismiss(null, 'cancel');
+
+const confirm = () => {
+  const name = input.value.$el.value;
+  modal.value.$el.dismiss(name, 'confirm');
+};
+
+const onWillDismiss = (ev) => {
+  if (ev.detail.role === 'confirm') {
+    message.value = `Hello, ${ev.detail.data}!`;
+  }
+};
 </script>

@@ -8,26 +8,47 @@
         <ion-card-content>{{ pr_omschrijving }}</ion-card-content>
 
         <ion-row>
-            <ion-button fill="clear" color="tertiary" aria-label="Favorite">
+            <ion-button fill="clear" color="tertiary" aria-label="edit" @click="openProjectModal">
                 Beheer <ion-icon slot="end" :icon="cogOutline" color="tertiary"></ion-icon>
             </ion-button>
-            <ion-button fill="clear" color="danger" aria-label="Favorite">
+            <ion-button fill="clear" color="danger" aria-label="delete" @click="deleteProject(pr_id)">
                 Verwijder <ion-icon slot="end" :icon="trashOutline" color="danger"></ion-icon>
             </ion-button>
         </ion-row>
     </ion-card>
 </template>
-  
+    
 <script setup>
-import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonButton, IonIcon, IonRow, IonCol } from '@ionic/vue';
+import { defineProps, defineEmits, inject, ref } from 'vue';
+import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, IonIcon, IonRow } from '@ionic/vue';
 import { cogOutline, trashOutline } from 'ionicons/icons';
 
-defineProps({
-    pr_naam: String,
-    pr_code: String,
-    pr_omschrijving: String,
-    pr_id: Number
-});
+const { pr_naam, pr_code, pr_omschrijving, pr_id } = defineProps(['pr_naam', 'pr_code', 'pr_omschrijving', 'pr_id']);
+const emit = defineEmits();
+
+const openProjectModal = () => {
+    emit('openProjectModal', {
+        pr_naam,
+        pr_code,
+        pr_omschrijving,
+        pr_id,
+    });
+};
+
+const axios = inject('axios');
+const deleteProject = (projectID) => {
+  axios
+    .delete('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTEN.php',  {
+        data: { pr_id: projectID }
+    })
+    .then(response => {
+      if (response.status !== 200) {
+        console.log('Error tijdens het verwijderen van project' + response.status)
+      }
+      console.log('Project removed');
+      emit('projectenUpdated');
+    });
+}
 </script>
   
 <style scoped>
