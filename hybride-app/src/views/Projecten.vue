@@ -35,6 +35,7 @@ import ProjectModal from '@/components/ProjectModal.vue';
 const axios = inject('axios');
 const projecten = ref([]);
 const isModalOpen = ref(false);
+const emit = defineEmits();
 
 const getProjecten = () => {
   axios
@@ -68,7 +69,6 @@ const refreshProjecten = () => {
   getProjecten();
 };
 
-const emit = defineEmits();
 onIonViewWillEnter(() => {
   getProjecten();
 });

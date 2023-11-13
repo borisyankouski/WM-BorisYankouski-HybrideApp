@@ -17,7 +17,7 @@
         <ion-card-content>{{ pr_omschrijving }}</ion-card-content>
 
         <ion-row>
-            <ion-button fill="clear" color="tertiary" aria-label="edit" @click="showProjectDetails">
+            <ion-button fill="clear" color="tertiary" aria-label="edit" href="/tabs/tab4">
                 Beheer <ion-icon slot="end" :icon="cogOutline" color="tertiary"></ion-icon>
             </ion-button>
             <ion-button :id="'deleteProjectBtn_' + pr_id" fill="clear" color="danger" aria-label="delete"
@@ -27,7 +27,7 @@
         </ion-row>
         <ion-alert :trigger="'deleteProjectBtn_' + pr_id" v-model="deleteAlertVisible" header="Project Verwijderen"
             message="Deze actie kan niet ongedaan worden!" :buttons="alertButtons"></ion-alert>
-        <ion-toast :id="'open-toast_' + pr_id" :message="'Project ' + pr_code + ' succesvol verwijderd!'"
+        <ion-toast :id="'open-toast_' + pr_id" :message="'Project ' + pr_code + ' verwijderd!'"
             :duration="2000"></ion-toast>
         <ProjectModal :isModalOpen="isModalOpen" :projectDetails="selectedProjectDetails" :title="'Project Aanpassen'"
             :type="'put'" @closeModal="closeModal" @projectenUpdated="refreshProjecten" @projectAdded="openUpdateToast" />
