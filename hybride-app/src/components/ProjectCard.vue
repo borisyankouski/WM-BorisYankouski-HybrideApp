@@ -28,7 +28,7 @@
         <ion-alert :trigger="'deleteProjectBtn_' + pr_id" v-model="deleteAlertVisible" header="Project Verwijderen"
             message="Deze actie kan niet ongedaan worden!" :buttons="alertButtons"></ion-alert>
         <ion-toast :id="'open-toast_' + pr_id" :message="'Project ' + pr_code + ' succesvol verwijderd!'"
-            :duration="3000"></ion-toast>
+            :duration="2000"></ion-toast>
         <ProjectModal :isModalOpen="isModalOpen" :projectDetails="selectedProjectDetails" :title="'Project Aanpassen'"
             :type="'put'" @closeModal="closeModal" @projectenUpdated="refreshProjecten" @projectAdded="openUpdateToast" />
     </ion-card>
@@ -52,7 +52,7 @@ const selectedProjectDetails = ref({
 })
 
 const showProjectDetails = () => {
-    
+
 }
 
 const openProjectModal = () => {

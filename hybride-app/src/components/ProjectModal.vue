@@ -68,6 +68,9 @@ onMounted(() => {
 
 const closeModal = () => {
     emit('closeModal');
+    if (type == 'post') {
+        clearFields();
+    }
 };
 
 const submitForm = () => {
@@ -81,7 +84,6 @@ const submitForm = () => {
     else if (type == 'put') {
         putProject({pr_id: projectID.value, pr_naam: projectNaam.value, pr_code: projectCode.value, pr_omschrijving: projectOmschrijving.value});   
     }
-    clearFields();
     closeModal();
 };
 

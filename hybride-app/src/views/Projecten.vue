@@ -20,7 +20,7 @@
         @projectenUpdated="refreshProjecten" @click="projectCardClicked" />
       <ProjectModal :isModalOpen="isModalOpen" :projectDetails="null" :title="'Project Toevoegen'" :type="'post'" @closeModal="closeModal"
         @projectenUpdated="refreshProjecten" @projectAdded="openToast" />
-      <ion-toast :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="3000"></ion-toast>
+      <ion-toast :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="2000"></ion-toast>
     </ion-content>
   </ion-page>
 </template>
