@@ -74,7 +74,7 @@ const closeModal = () => {
 };
 
 const submitForm = () => {
-    if (projectNaam.value.length < 1 || projectCode.value.length < 1 || projectOmschrijving.value.length < 1) {
+    if (projectNaam.value.length < 1 || projectCode.value.length < 1) {
         console.log('formchecking failed');
         return;
     }
@@ -93,6 +93,7 @@ const postProject = (project) => {
         console.log('Error tijdens het posten van medewerker' + response.status)
       }
       console.log('Project added');
+      emit('projectAdded');
       emit('projectenUpdated');
     });
 }

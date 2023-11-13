@@ -11,18 +11,20 @@
             <ion-button fill="clear" color="tertiary" aria-label="edit" @click="openProjectModal">
                 Beheer <ion-icon slot="end" :icon="cogOutline" color="tertiary"></ion-icon>
             </ion-button>
-            <ion-button :id="'deleteProjectBtn_' + pr_id" fill="clear" color="danger" aria-label="delete" @click="handleDeleteClick">
+            <ion-button :id="'deleteProjectBtn_' + pr_id" fill="clear" color="danger" aria-label="delete"
+                @click="handleDeleteClick">
                 Verwijder <ion-icon slot="end" :icon="trashOutline" color="danger"></ion-icon>
             </ion-button>
         </ion-row>
         <ion-alert :trigger="'deleteProjectBtn_' + pr_id" v-model="deleteAlertVisible" header="Project Verwijderen"
             message="Deze actie kan niet ongedaan worden!" :buttons="alertButtons"></ion-alert>
+        <ion-toast :id="'open-toast_' + pr_id" :message="'Project ' + pr_code + ' succesvol verwijderd!'" :duration="3000"></ion-toast>
     </ion-card>
 </template>
     
 <script setup>
 import { defineProps, defineEmits, inject, ref } from 'vue';
-import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, IonIcon, IonRow, IonAlert } from '@ionic/vue';
+import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, IonIcon, IonRow, IonAlert, IonToast } from '@ionic/vue';
 import { cogOutline, trashOutline } from 'ionicons/icons';
 
 const { pr_naam, pr_code, pr_omschrijving, pr_id } = defineProps(['pr_naam', 'pr_code', 'pr_omschrijving', 'pr_id']);
@@ -35,6 +37,14 @@ const openProjectModal = () => {
         pr_omschrijving,
         pr_id,
     });
+};
+
+const openToast = () => {
+    const toastInstance = document.getElementById('open-toast_' + pr_id);
+    console.log(toastInstance);
+    if (toastInstance) {
+        toastInstance.present();
+    }
 };
 
 const deleteAlertVisible = ref(false);
@@ -64,6 +74,7 @@ const alertButtons = [
     {
         text: 'Verwijderen',
         cssClass: 'alertBtnConfirm',
+        // id: 'open-toast_'+pr_id,
         handler: () => {
             deleteProject(pr_id);
             hideDeleteAlert();
@@ -83,6 +94,8 @@ const deleteProject = (projectID) => {
             }
             console.log('Project removed');
             emit('projectenUpdated');
+            openToast();
+            // showToast(`Project ${pr_code} verwijderd!`);
         });
 }
 </script>

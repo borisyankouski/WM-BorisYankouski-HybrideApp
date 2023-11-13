@@ -17,13 +17,14 @@
 
       <ProjectCard v-for="project in projecten" :key="project.pr_id" :pr_naam="project.pr_naam" :pr_code="project.pr_code"
         :pr_omschrijving="project.pr_omschrijving" :pr_id="project.pr_id" @openProjectModal="openProjectModal" @projectenUpdated="refreshProjecten"/>
-      <ProjectModal :isModalOpen="isModalOpen" :projectDetails="selectedProjectDetails" @closeModal="closeModal" @projectenUpdated="refreshProjecten"/>
+      <ProjectModal :isModalOpen="isModalOpen" :projectDetails="selectedProjectDetails" @closeModal="closeModal" @projectenUpdated="refreshProjecten" @projectAdded="openToast"/>
+      <ion-toast :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="3000"></ion-toast>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, onIonViewWillEnter } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, onIonViewWillEnter, IonToast } from '@ionic/vue';
 import { addCircleOutline } from 'ionicons/icons';
 import { ref, inject, defineEmits } from 'vue';
 import ProjectCard from '@/components/ProjectCard.vue';
@@ -48,6 +49,14 @@ const getProjecten = () => {
       projecten.value = response.data.data;
     });
 }
+
+const openToast = () => {
+    const toastInstance = document.getElementById('open-toast');
+    console.log(toastInstance);
+    if (toastInstance) {
+        toastInstance.present();
+    }
+};
 
 const refreshProjecten = () => {
   getProjecten();
