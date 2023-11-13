@@ -2,7 +2,7 @@
     <ion-modal id="modalWrapper" :is-open="isModalOpen" @ionModalDidDismiss="closeModal" auto-height>
         <ion-header>
             <ion-toolbar>
-                <ion-title style="align-self: flex-start;">Project Toevoegen/Aanpassen</ion-title>
+                <ion-title style="align-self: flex-start;">{{ title }}</ion-title>
                 <ion-buttons slot="end">
                     <ion-button @click="closeModal">
                         <ion-icon :icon="closeCircleOutline" color="danger"></ion-icon>
@@ -38,7 +38,7 @@ import { ref, inject, onMounted, watch, defineProps, defineEmits } from 'vue';
 import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonItem, IonLabel, IonInput, IonText, IonTextarea, IonRow, IonCol, onIonViewDidEnter } from '@ionic/vue';
 import { closeCircleOutline } from 'ionicons/icons';
 
-const { isModalOpen, projectDetails } = defineProps(['isModalOpen', 'projectDetails']);
+const { isModalOpen, projectDetails, title, type } = defineProps(['isModalOpen', 'projectDetails', 'title', 'type']);
 const emit = defineEmits();
 
 const projectID = ref('');
@@ -54,18 +54,15 @@ const clearFields = () => {
 }
 
 const updateValues = () => {
-    projectID.value = projectDetails.pr_id ? projectDetails.pr_id : '';
-    projectNaam.value = projectDetails.pr_naam ? projectDetails.pr_naam : '';
-    projectCode.value = projectDetails.pr_code ? projectDetails.pr_code : '';
-    projectOmschrijving.value = projectDetails.pr_omschrijving ? projectDetails.pr_omschrijving : '';
+    console.log(`test ${projectDetails}`);
+    console.log(projectDetails);
+    projectID.value = projectDetails ? projectDetails.pr_id : '';
+    projectNaam.value = projectDetails ? projectDetails.pr_naam : '';
+    projectCode.value = projectDetails ? projectDetails.pr_code : '';
+    projectOmschrijving.value = projectDetails ? projectDetails.pr_omschrijving : '';
 };
 
-
 onMounted(() => {
-    updateValues();
-});
-
-watch(projectDetails, () => {
     updateValues();
 });
 
@@ -78,10 +75,14 @@ const submitForm = () => {
         console.log('formchecking failed');
         return;
     }
-    postProject({pr_naam: projectNaam.value, pr_code: projectCode.value, pr_omschrijving: projectOmschrijving.value});
+    if (type == 'post') {
+        postProject({pr_naam: projectNaam.value, pr_code: projectCode.value, pr_omschrijving: projectOmschrijving.value});
+    }
+    else if (type == 'put') {
+        putProject({pr_id: projectID.value, pr_naam: projectNaam.value, pr_code: projectCode.value, pr_omschrijving: projectOmschrijving.value});   
+    }
     clearFields();
     closeModal();
-    // TODO ADD FEEDBACK TOAST
 };
 
 const axios = inject('axios');
@@ -93,6 +94,19 @@ const postProject = (project) => {
         console.log('Error tijdens het posten van medewerker' + response.status)
       }
       console.log('Project added');
+      emit('projectAdded');
+      emit('projectenUpdated');
+    });
+}
+
+const putProject = (project) => {
+  axios
+    .put('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTEN.php', project)
+    .then(response => {
+      if (response.status !== 200) {
+        console.log('Error tijdens het updaten van' + response.status)
+      }
+      console.log('Project updated');
       emit('projectAdded');
       emit('projectenUpdated');
     });

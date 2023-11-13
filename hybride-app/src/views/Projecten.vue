@@ -16,8 +16,10 @@
       </ion-header>
 
       <ProjectCard v-for="project in projecten" :key="project.pr_id" :pr_naam="project.pr_naam" :pr_code="project.pr_code"
-        :pr_omschrijving="project.pr_omschrijving" :pr_id="project.pr_id" @openProjectModal="openProjectModal" @projectenUpdated="refreshProjecten"/>
-      <ProjectModal :isModalOpen="isModalOpen" :projectDetails="selectedProjectDetails" @closeModal="closeModal" @projectenUpdated="refreshProjecten" @projectAdded="openToast"/>
+        :pr_omschrijving="project.pr_omschrijving" :pr_id="project.pr_id"
+        @projectenUpdated="refreshProjecten" @click="projectCardClicked" />
+      <ProjectModal :isModalOpen="isModalOpen" :projectDetails="null" :title="'Project Toevoegen'" :type="'post'" @closeModal="closeModal"
+        @projectenUpdated="refreshProjecten" @projectAdded="openToast" />
       <ion-toast :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="3000"></ion-toast>
     </ion-content>
   </ion-page>
@@ -51,11 +53,15 @@ const getProjecten = () => {
 }
 
 const openToast = () => {
-    const toastInstance = document.getElementById('open-toast');
-    console.log(toastInstance);
-    if (toastInstance) {
-        toastInstance.present();
-    }
+  const toastInstance = document.getElementById('open-toast');
+  console.log(toastInstance);
+  if (toastInstance) {
+    toastInstance.present();
+  }
+};
+
+const projectCardClicked = () => {
+  console.log('tettttstt');
 };
 
 const refreshProjecten = () => {
@@ -73,13 +79,5 @@ const openModal = () => {
 
 const closeModal = () => {
   isModalOpen.value = false;
-};
-
-const selectedProjectDetails = ref({});
-
-const openProjectModal = (projectDetails) => {
-  selectedProjectDetails.value = projectDetails;
-  emit('updateValues', projectDetails);
-  openModal();
 };
 </script>
