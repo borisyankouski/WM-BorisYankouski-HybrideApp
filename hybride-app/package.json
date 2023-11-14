@@ -21,6 +21,7 @@
     "@ionic/vue-router": "^7.0.0",
     "axios": "^1.6.1",
     "ionicons": "^7.0.0",
+    "mitt": "^3.0.1",
     "vue": "^3.2.45",
     "vue-axios": "^3.5.2",
     "vue-router": "^4.1.6"
