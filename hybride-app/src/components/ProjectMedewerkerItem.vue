@@ -13,11 +13,12 @@
             </ion-label>
         </ion-toggle>
     </ion-item>
+    <ion-toast :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="1000"></ion-toast>
 </template>
 
 <script setup>
-import { defineProps, defineEmits, inject, ref } from 'vue';
-import { IonItem, IonToggle, IonLabel, IonNote, IonRow } from '@ionic/vue';
+import { defineProps, inject, ref } from 'vue';
+import { IonItem, IonToggle, IonLabel, IonNote, IonRow, IonToast } from '@ionic/vue';
 const { mw_naam, sp_naam, mw_id, pr_id, listIndex, isActive } = defineProps(['mw_naam', 'sp_naam', 'mw_id', 'pr_id', 'listIndex', 'isActive']);
 const isActiveEmployee = ref(isActive);
 
@@ -25,10 +26,24 @@ const toggleChanged = (event) => {
     if (event.detail.checked) {
         addMedewerkerToProject(mw_id, pr_id);
         console.log('Adding medewerker ' + mw_id + ' added to project ' + pr_id);
+        openToast('post');
     }
     else {
         removeMedewerkerFromProject(mw_id, pr_id);
         console.log('Removing medewerker ' + mw_id + ' removed from project ' + pr_id);
+        openToast('delete');
+    }
+};
+
+const openToast = (type) => {
+    const toastInstance = document.getElementById('open-toast');
+    if (type == 'post') {
+        toastInstance.message = `${mw_naam} toegevoegd aan project!`
+    } else if ( type == 'delete') {
+        toastInstance.message = `${mw_naam} verwijderd van project!`
+    }
+    if (toastInstance) {
+        toastInstance.present();
     }
 };
 

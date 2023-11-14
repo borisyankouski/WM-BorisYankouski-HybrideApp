@@ -10,8 +10,8 @@
                     </ion-col>
 
                     <ion-col>
-                        <ion-select v-model="selectedProjectID" aria-label="Project Code"
-                            interface="action-sheet" label-placement="floating" @ionChange="selectionChanged">
+                        <ion-select v-model="selectedProjectID" aria-label="Project Code" interface="action-sheet"
+                            label-placement="floating" @ionChange="selectionChanged">
                             <ion-select-option v-for="project in projecten" :value="project.pr_id">{{ project.pr_naam
                             }}</ion-select-option>
                         </ion-select>
@@ -19,7 +19,7 @@
                 </ion-row>
             </ion-toolbar>
             <ion-toolbar>
-                <ion-searchbar @ionInput="handleSearch" placeholder="Filter Medewerkers"></ion-searchbar>
+                <ion-searchbar @ionInput="handleSearch" placeholder=" Zoeken"></ion-searchbar>
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
@@ -38,11 +38,10 @@
 </template>
   
 <script setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, onIonViewWillEnter, IonSelect, IonSelectOption, IonSearchbar, IonButton, IonIcon, IonRow, IonCol } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, onIonViewWillEnter, IonSelect, IonSelectOption, IonSearchbar, IonButton, IonBackButton, IonIcon, IonRow, IonCol } from '@ionic/vue';
 import { ref, inject } from 'vue';
 import ProjectMedewerkerItem from '@/components/ProjectMedewerkerItem.vue';
 import { chevronBackOutline } from 'ionicons/icons';
-
 
 const allMedewerkers = ref([]);
 const medewerkers = ref([]);
@@ -59,7 +58,7 @@ const getProjectCode = () => {
     console.log(selectedProjectID.value);
     console.log('test');
     const selectedProject = projecten.value.find(project => project.pr_id == selectedProjectID.value);
-    return selectedProject ? selectedProject.pr_code : ''; // Assuming pr_code is the property you want to display
+    return selectedProject ? selectedProject.pr_code : '';
 };
 
 const getProjecten = () => {
@@ -144,11 +143,9 @@ const getMedewerkers = async () => {
 
 const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
-    if (searchTerm === '') {
-        // If the search term is empty, restore the original list
+    if (searchTerm == '') {
         medewerkers.value = allMedewerkers.value;
     } else {
-        // Otherwise, perform the search
         medewerkers.value = allMedewerkers.value.filter((medewerker) => {
             const fullName = medewerker.mw_naam.toLowerCase();
             return fullName.includes(searchTerm);
@@ -181,7 +178,6 @@ onIonViewWillEnter(() => {
 }
 
 #backButton {
-    /* max-width: 50px; */
     margin-left: -10px;
 }
 </style>

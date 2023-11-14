@@ -124,7 +124,6 @@ const deleteProject = (projectID) => {
             console.log('Project removed');
             emit('projectenUpdated');
             openDeleteToast();
-            // showToast(`Project ${pr_code} verwijderd!`);
         });
 }
 

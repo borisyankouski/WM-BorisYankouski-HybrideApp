@@ -3,10 +3,17 @@
     <ion-header>
       <ion-toolbar>
         <ion-title slot="start">Projecten</ion-title>
+
+        <!-- <ion-searchbar @ionInput="handleSearch" placeholder="Zoek Projecten"></ion-searchbar> -->
         <ion-button slot="end" fill="clear" color="success" @click="openModal">
           Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
         </ion-button>
       </ion-toolbar>
+
+      <ion-toolbar>
+        <ion-searchbar @ionInput="handleSearch" placeholder=" Zoeken"></ion-searchbar>
+      </ion-toolbar>
+
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
@@ -17,7 +24,7 @@
 
       <ProjectCard v-for="project in projecten" :key="project.pr_id" :pr_naam="project.pr_naam" :pr_code="project.pr_code"
         :pr_omschrijving="project.pr_omschrijving" :pr_id="project.pr_id"
-        @projectenUpdated="refreshProjecten" @click="projectCardClicked" />
+        @projectenUpdated="refreshProjecten" />
       <ProjectModal :isModalOpen="isModalOpen" :projectDetails="null" :title="'Project Toevoegen'" :type="'post'" @closeModal="closeModal"
         @projectenUpdated="refreshProjecten" @projectAdded="openToast" />
       <ion-toast :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="2000"></ion-toast>
@@ -26,13 +33,14 @@
 </template>
 
 <script setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, onIonViewWillEnter, IonToast } from '@ionic/vue';
-import { addCircleOutline } from 'ionicons/icons';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, onIonViewWillEnter, IonToast, IonSearchbar } from '@ionic/vue';
+import { addCircleOutline, search } from 'ionicons/icons';
 import { ref, inject, defineEmits } from 'vue';
 import ProjectCard from '@/components/ProjectCard.vue';
 import ProjectModal from '@/components/ProjectModal.vue';
 
 const axios = inject('axios');
+const allProjecten = ref([]);
 const projecten = ref([]);
 const isModalOpen = ref(false);
 const emit = defineEmits();
@@ -50,6 +58,7 @@ const getProjecten = () => {
       }
       console.log(response.data);
       projecten.value = response.data.data;
+      allProjecten.value = projecten.value;
     });
 }
 
@@ -61,8 +70,17 @@ const openToast = () => {
   }
 };
 
-const projectCardClicked = () => {
-  console.log('tettttstt');
+const handleSearch = (event) => {
+    const searchTerm = event.target.value.toLowerCase();
+    if (searchTerm == '') {
+        projecten.value = allProjecten.value;
+    } else {
+        projecten.value = allProjecten.value.filter((project) => {
+            const projectNaam = project.pr_naam.toLowerCase();
+            const projectCode = project.pr_code.toLowerCase();
+            return (projectNaam.includes(searchTerm) || projectCode.includes(searchTerm));
+        });
+    }
 };
 
 const refreshProjecten = () => {
