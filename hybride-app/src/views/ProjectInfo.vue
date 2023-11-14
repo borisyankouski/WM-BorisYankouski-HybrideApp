@@ -27,19 +27,22 @@
 <script setup>
 import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, onIonViewWillEnter, IonSelect, IonSelectOption } from '@ionic/vue';
 import { ref, inject } from 'vue';
-import eventBus from '@/event-bus.js';
 import ProjectMedewerkerItem from '@/components/ProjectMedewerkerItem.vue';
 
 const medewerkers = ref([]);
 
 const axios = inject('axios');
 
-const selectedProjectID = ref(1);
+const selectedProjectID = ref(null);
+
 const projecten = ref([]);
 let activeMedewerkerIDs = [];
 
 const getProjectCode = () => {
-    const selectedProject = projecten.value.find(project => project.pr_id === selectedProjectID.value);
+    console.log(projecten.value);
+    console.log(selectedProjectID.value);
+    console.log('test');
+    const selectedProject = projecten.value.find(project => project.pr_id == selectedProjectID.value);
     return selectedProject ? selectedProject.pr_code : ''; // Assuming pr_code is the property you want to display
 };
 
@@ -134,14 +137,8 @@ const selectionChanged = () => {
 };
 
 onIonViewWillEnter(() => {
+    selectedProjectID.value = parseInt(localStorage.getItem('selectedProjectID'));
     getProjecten();
-    refreshMedewerkers();
-});
-
-eventBus.on('updateSelectedProjectID', (newProjectID) => {
-    // Handle the newProjectID here
-    console.log('Received updated project ID:', newProjectID);
-    selectedProjectID.value = newProjectID;
     refreshMedewerkers();
 });
 </script>

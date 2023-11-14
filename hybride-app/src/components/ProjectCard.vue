@@ -38,7 +38,6 @@
 import { defineProps, defineEmits, inject, ref } from 'vue';
 import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, IonIcon, IonRow, IonCol, IonAlert, IonToast } from '@ionic/vue';
 import { cogOutline, createOutline, trashOutline } from 'ionicons/icons';
-import eventBus from '@/event-bus.js';
 import ProjectModal from '@/components/ProjectModal.vue';
 
 const { pr_naam, pr_code, pr_omschrijving, pr_id } = defineProps(['pr_naam', 'pr_code', 'pr_omschrijving', 'pr_id']);
@@ -54,7 +53,7 @@ const selectedProjectDetails = ref({
 
 const showProjectDetails = () => {
     console.log('sending pr_id ' + pr_id);
-    eventBus.emit('updateSelectedProjectID', pr_id);
+    localStorage.setItem('selectedProjectID', pr_id);
 }
 
 const openProjectModal = () => {
