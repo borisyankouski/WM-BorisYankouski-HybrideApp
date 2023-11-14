@@ -4,19 +4,19 @@
             <ion-row>
                 <ion-col>
                     <ion-card-title>{{ pr_naam }}</ion-card-title>
-                    <ion-card-subtitle color="secondary">{{ pr_code }}</ion-card-subtitle>
+                    <ion-card-subtitle id="projectCodeTxt" color="secondary">{{ pr_code }}</ion-card-subtitle>
                 </ion-col>
-                <ion-col size="2">
-                    <ion-button fill="clear" aria-label="manage" @click="openProjectModal">
+                <ion-col size="1.5">
+                    <ion-button id="editButton" size="small" fill="clear" aria-label="manage" @click="openProjectModal">
                         <ion-icon slot="icon-only" size="" :icon="createOutline"></ion-icon>
                     </ion-button>
                 </ion-col>
             </ion-row>
         </ion-card-header>
 
-        <ion-card-content>{{ pr_omschrijving }}</ion-card-content>
+        <ion-card-content id="projectOmschrijvingTxt">{{ pr_omschrijving }}</ion-card-content>
 
-        <ion-row>
+        <ion-row id="cardButtonsRow">
             <ion-button fill="clear" color="tertiary" aria-label="edit" @click="showProjectDetails" href="/tabs/tab4">
                 Beheer <ion-icon slot="end" :icon="cogOutline" color="tertiary"></ion-icon>
             </ion-button>
@@ -25,6 +25,7 @@
                 Verwijder <ion-icon slot="end" :icon="trashOutline" color="danger"></ion-icon>
             </ion-button>
         </ion-row>
+
         <ion-alert :translucent="true" :trigger="'deleteProjectBtn_' + pr_id" v-model="deleteAlertVisible"
             header="Project Verwijderen" message="Deze actie kan niet ongedaan worden!" :buttons="alertButtons"></ion-alert>
         <ion-toast :translucent="true" :id="'open-toast_' + pr_id" :message="'Project ' + pr_code + ' verwijderd!'"
@@ -52,7 +53,7 @@ const selectedProjectDetails = ref({
 })
 
 const showProjectDetails = () => {
-    console.log('sending pr_id ' + pr_id);
+    // console.log('sending pr_id ' + pr_id);
     localStorage.setItem('selectedProjectID', pr_id);
 }
 
@@ -147,6 +148,23 @@ const closeModal = () => {
 <style>
 #btnDelete button {
     align-self: flex-end;
+}
+
+#editButton {
+    margin-top: -12px;
+}
+
+#cardButtonsRow {
+    padding-left: 6px;
+}
+
+#projectCodeTxt {
+    padding-left: 1px;
+}
+
+#projectOmschrijvingTxt {
+    padding-left: 26px;
+    padding-bottom: 3px;
 }
 
 .alert-wrapper {

@@ -24,8 +24,7 @@
             </ion-item>
 
             <ion-item style="min-height: 120px;">
-                <ion-label position="floating">Omschrijving</ion-label>
-                <ion-textarea style="min-height: 120px;" v-model="projectOmschrijving"
+                <ion-textarea label="Omschrijving" label-placement="floating" style="min-height: 120px;" v-model="projectOmschrijving"
                     placeholder="Het Alphabet Project is een ambitieus initiatief gericht op het verbeteren van alfabetiseringsniveaus en taalvaardigheden in lokale gemeenschappen."></ion-textarea>
             </ion-item>
             <ion-button style="margin-top: 26px;" @click="submitForm" expand="full" color="success">Submit</ion-button>
@@ -54,8 +53,6 @@ const clearFields = () => {
 }
 
 const updateValues = () => {
-    console.log(`test ${projectDetails}`);
-    console.log(projectDetails);
     projectID.value = projectDetails ? projectDetails.pr_id : '';
     projectNaam.value = projectDetails ? projectDetails.pr_naam : '';
     projectCode.value = projectDetails ? projectDetails.pr_code : '';
@@ -93,7 +90,7 @@ const postProject = (project) => {
     .post('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTEN.php', project)
     .then(response => {
       if (response.status !== 200) {
-        console.log('Error tijdens het posten van medewerker' + response.status)
+        console.log('Error tijdens het posten van project' + response.status)
       }
       console.log('Project added');
       emit('projectAdded');
@@ -106,7 +103,7 @@ const putProject = (project) => {
     .put('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTEN.php', project)
     .then(response => {
       if (response.status !== 200) {
-        console.log('Error tijdens het updaten van' + response.status)
+        console.log('Error tijdens het updaten van project' + response.status)
       }
       console.log('Project updated');
       emit('projectAdded');

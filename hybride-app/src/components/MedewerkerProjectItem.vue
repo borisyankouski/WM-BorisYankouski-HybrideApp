@@ -1,37 +1,37 @@
 <template>
     <ion-item>
-        <ion-toggle :enable-on-off-labels="true" color="success" :data-mw_id="mw_id" :checked="isActiveEmployee"
+        <ion-toggle :enable-on-off-labels="true" color="success" :data-pr_id="pr_id" :checked="isActiveProject"
             @ion-change="toggleChanged">
             <ion-label>
                 <ion-row>
-                    <strong>{{ mw_naam }}</strong>
+                    <strong>{{ pr_naam }}</strong>
                 </ion-row>
                 <ion-row>
-                    <ion-note color="secondary">{{ sp_naam }}</ion-note>
+                    <ion-note color="secondary">{{ pr_code }}</ion-note>
 
                 </ion-row>
             </ion-label>
         </ion-toggle>
     </ion-item>
-    <ion-toast :translucent="true" :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="1000"></ion-toast>
+    <ion-toast :translucent="true" :id="'open-toast'" :message="'Medewerker succesvol toegevoegd!'" :duration="1000"></ion-toast>
 </template>
 
 <script setup>
 import { defineProps, inject, ref } from 'vue';
 import { IonItem, IonToggle, IonLabel, IonNote, IonRow, IonToast } from '@ionic/vue';
 import { trashOutline, cloudUploadOutline, addCircleOutline, addCircle } from 'ionicons/icons';
-const { mw_naam, sp_naam, mw_id, pr_id, listIndex, isActive } = defineProps(['mw_naam', 'sp_naam', 'mw_id', 'pr_id', 'listIndex', 'isActive']);
-const isActiveEmployee = ref(isActive);
+const { pr_naam, pr_code, pr_id, mw_id, listIndex, isActive } = defineProps(['pr_naam', 'pr_code', 'pr_id', 'mw_id', 'listIndex', 'isActive']);
+const isActiveProject = ref(isActive);
 
 const toggleChanged = (event) => {
     if (event.detail.checked) {
-        addMedewerkerToProject(mw_id, pr_id);
-        console.log('Adding medewerker ' + mw_id + ' to project ' + pr_id);
+        addProjectToMedewerker(pr_id, mw_id);
+        console.log('Adding project ' + pr_id + ' to medewerker ' + mw_id);
         openToast('post');
     }
     else {
-        removeMedewerkerFromProject(mw_id, pr_id);
-        console.log('Removing medewerker ' + mw_id + ' from project ' + pr_id);
+        removeProjectFromMedewerker(pr_id, mw_id);
+        console.log('Removing project ' + pr_id + ' from medewerker ' + mw_id);
         openToast('delete');
     }
 };
@@ -41,11 +41,11 @@ const openToast = (type) => {
     if (type == 'post') {
         toastInstance.icon = addCircleOutline;
         toastInstance.cssClass = 'addToast';
-        toastInstance.message = `${mw_naam} toegevoegd aan project!`;
+        toastInstance.message = `${pr_code} toegevoegd aan medewerker!`;
     } else if (type == 'delete') {
         toastInstance.icon = trashOutline;
         toastInstance.cssClass = 'deleteToast';
-        toastInstance.message = `${mw_naam} verwijderd van project!`;
+        toastInstance.message = `${pr_code} verwijderd van medewerker!`;
     }
     if (toastInstance) {
         toastInstance.present();
@@ -53,7 +53,7 @@ const openToast = (type) => {
 };
 
 const axios = inject('axios');
-const addMedewerkerToProject = (mw_id, pr_id) => {
+const addProjectToMedewerker = (pr_id, mw_id) => {
     axios
         .post('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTMEDEWERKERS.php', {
             mw_id: mw_id,
@@ -62,13 +62,13 @@ const addMedewerkerToProject = (mw_id, pr_id) => {
         )
         .then(response => {
             if (response.status !== 200) {
-                console.log('Error tijdens het posten van medewerker' + response.status)
+                console.log('Error tijdens het posten van project' + response.status)
             }
-            console.log('Medewerker ' + mw_id + ' added to project ' + pr_id);
+            console.log('Project ' + pr_id + ' added to medewerker ' + mw_id);
         });
 };
 
-const removeMedewerkerFromProject = (mw_id, pr_id) => {
+const removeProjectFromMedewerker = (pr_id, mw_id) => {
     axios
         .delete('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTMEDEWERKERS.php', {
             data: {
@@ -78,9 +78,9 @@ const removeMedewerkerFromProject = (mw_id, pr_id) => {
         })
         .then(response => {
             if (response.status !== 200) {
-                console.log('Error tijdens het posten van medewerker' + response.status)
+                console.log('Error tijdens het posten van project' + response.status)
             }
-            console.log('Medewerker ' + mw_id + ' removed from project ' + pr_id);
+            console.log('Project ' + pr_id + ' added to medewerker ' + mw_id);
         });
 };
 </script>

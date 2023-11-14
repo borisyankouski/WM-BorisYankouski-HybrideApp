@@ -1,37 +1,55 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
+    <ion-header :translucent="true">
+      <ion-toolbar id="topToolbar">
         <ion-title slot="start">Medewerkers</ion-title>
-        <ion-button id="addMedewerkerBtn" slot="end" fill="clear" color="secondary">
-          Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
-        </ion-button>
+        <ion-buttons :collapse="true" slot="end">
+          <ion-button fill="clear" color="success" @click="openModal">
+            Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
+
+      <ion-toolbar>
+        <ion-searchbar @ionInput="handleSearch" :enterkeyhint="search" placeholder=" Zoeken"></ion-searchbar>
+      </ion-toolbar>
+
     </ion-header>
     <ion-content :fullscreen="true">
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Medewerkers</ion-title>
+          <ion-buttons :collapse="true" id="collapseNieuwButton" slot="end">
+            <ion-button fill="clear" color="success" @click="openModal">
+              Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
 
-
-      <MedewerkerCard v-for="medewerker in medewerkers" :key="medewerker.mw_id" :Voornaam="medewerker.mw_voornaam"
-        :Familienaam="medewerker.mw_familienaam" :Specialisatie="medewerker.sp_naam" :sp_id="medewerker.sp_id"
-        :mw_id="medewerker.mw_id" />
+      <MedewerkerCard v-for="medewerker in medewerkers" :key="medewerker.mw_id" :mw_voornaam="medewerker.mw_voornaam"
+        :mw_familienaam="medewerker.mw_familienaam" :sp_naam="medewerker.sp_naam" :sp_id="medewerker.sp_id"
+        :mw_id="medewerker.mw_id" @medewerkersUpdated="refreshMedewerkers" />
+      <MedewerkerModal :isModalOpen="isModalOpen" :medewerkerDetails="null" :title="'Medewerker Toevoegen'" :type="'post'"
+        @closeModal="closeModal" @medewerkersUpdated="refreshMedewerkers" @medewerkerAdded="openToast" />
+      <ion-toast :translucent="true" :id="'open-toast'" :message="'Medewerker succesvol toegevoegd!'" :duration="2000"
+        :icon="addCircleOutline" cssClass="addToast"></ion-toast>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, onIonViewWillEnter } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonIcon, onIonViewWillEnter, IonToast, IonSearchbar } from '@ionic/vue';
 import { addCircleOutline } from 'ionicons/icons';
-import { ref, inject } from 'vue';
+import { ref, inject, defineEmits } from 'vue';
 import MedewerkerCard from '@/components/MedewerkerCard.vue';
-
-const medewerkers = ref([]);
+import MedewerkerModal from '@/components/MedewerkerModal.vue';
 
 const axios = inject('axios');
+const allMedewerkers = ref([]);
+const medewerkers = ref([]);
+const isModalOpen = ref(false);
+const emit = defineEmits();
 
 const getMedewerkers = () => {
   axios
@@ -45,14 +63,60 @@ const getMedewerkers = () => {
         return;
       }
       console.log(response.data);
-      medewerkers.value = [];
-      for (let i = 0, end = response.data.data.length; i < end; i++) {
-        medewerkers.value.push(response.data.data[i]);
-      }
+      medewerkers.value = response.data.data;
+      allMedewerkers.value = medewerkers.value;
     });
 }
+
+const openToast = () => {
+  const toastInstance = document.getElementById('open-toast');
+  console.log(toastInstance);
+  if (toastInstance) {
+    toastInstance.present();
+  }
+};
+
+const handleSearch = (event) => {
+  const searchTerm = event.target.value.toLowerCase();
+  if (searchTerm == '') {
+    medewerkers.value = allMedewerkers.value;
+  } else {
+    medewerkers.value = allMedewerkers.value.filter((medewerker) => {
+      const medewerkerVoornaam = medewerker.mw_voornaam.toLowerCase();
+      const medewerkerFamilienaam = medewerker.mw_familienaam.toLowerCase();
+      return (medewerkerVoornaam.includes(searchTerm) || medewerkerFamilienaam.includes(searchTerm));
+    });
+  }
+};
+
+const refreshMedewerkers = () => {
+  getMedewerkers();
+};
 
 onIonViewWillEnter(() => {
   getMedewerkers();
 });
+
+const openModal = () => {
+  isModalOpen.value = true;
+};
+
+const closeModal = () => {
+  isModalOpen.value = false;
+};
 </script>
+
+<style scoped>
+#collapseNieuwButton {
+  margin-top: 6px;
+  margin-right: 3px;
+}
+
+.addToast::part(icon) {
+    color: #2fdf75;
+}
+
+ion-searchbar {
+    padding-top: 3px;
+}
+</style>

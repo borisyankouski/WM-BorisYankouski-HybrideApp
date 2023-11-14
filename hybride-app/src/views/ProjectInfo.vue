@@ -19,7 +19,7 @@
                 </ion-row>
             </ion-toolbar>
             <ion-toolbar>
-                <ion-searchbar @ionInput="handleSearch" placeholder=" Zoeken"></ion-searchbar>
+                <ion-searchbar @ionInput="handleSearch" :enterkeyhint="search" placeholder=" Zoeken"></ion-searchbar>
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
@@ -54,9 +54,6 @@ const projecten = ref([]);
 let activeMedewerkerIDs = [];
 
 const getProjectCode = () => {
-    console.log(projecten.value);
-    console.log(selectedProjectID.value);
-    console.log('test');
     const selectedProject = projecten.value.find(project => project.pr_id == selectedProjectID.value);
     return selectedProject ? selectedProject.pr_code : '';
 };
@@ -80,7 +77,6 @@ const getProjecten = () => {
 };
 
 const getActiveMedewerkerIDs = async () => {
-    console.log(selectedProjectID.value);
     try {
         const response = await axios.get('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTMEDEWERKERS.php', {
             params: {
@@ -99,10 +95,7 @@ const getActiveMedewerkerIDs = async () => {
             console.log('response.data.data is niet OK');
             return;
         }
-
-        console.log(response.data);
         activeMedewerkerIDs = response.data.data.map(item => item.mw_id);
-        console.log(activeMedewerkerIDs);
     } catch (error) {
         console.error('Error tijdens het ophalen van medewerkers', error);
     }
@@ -124,8 +117,6 @@ const getMedewerkers = async () => {
             return;
         }
 
-        console.log(response.data);
-
         medewerkers.value = response.data.data.map((item, index) => ({
             mw_id: item.mw_id,
             mw_naam: item.mw_voornaam + ' ' + item.mw_familienaam,
@@ -135,7 +126,6 @@ const getMedewerkers = async () => {
         }));
 
         allMedewerkers.value = medewerkers.value;
-        console.log(medewerkers);
     } catch (error) {
         console.error('Error tijdens het ophalen van medewerkers', error);
     }
@@ -180,6 +170,10 @@ onIonViewWillEnter(() => {
 #backButton {
     margin-left: -10px;
     margin-top: 0px;
+}
+
+ion-searchbar {
+    padding-top: 3px;
 }
 </style>
   
