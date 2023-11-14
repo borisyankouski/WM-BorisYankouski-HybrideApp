@@ -2,11 +2,24 @@
     <ion-page>
         <ion-header>
             <ion-toolbar>
-                <ion-select v-model="selectedProjectID" aria-label="Project Code" interface="action-sheet"
-                    label-placement="floating" @ionChange="selectionChanged">
-                    <ion-select-option v-for="project in projecten" :value="project.pr_id">{{ project.pr_naam
-                    }}</ion-select-option>
-                </ion-select>
+                <ion-row id="topToolbarRow">
+                    <ion-col size="1.5">
+                        <ion-button id="backButton" fill="clear" color="primary" href="tabs/tab2">
+                            <ion-icon size="small" slot="icon-only" :icon="chevronBackOutline"></ion-icon>
+                        </ion-button>
+                    </ion-col>
+
+                    <ion-col>
+                        <ion-select v-model="selectedProjectID" aria-label="Project Code"
+                            interface="action-sheet" label-placement="floating" @ionChange="selectionChanged">
+                            <ion-select-option v-for="project in projecten" :value="project.pr_id">{{ project.pr_naam
+                            }}</ion-select-option>
+                        </ion-select>
+                    </ion-col>
+                </ion-row>
+            </ion-toolbar>
+            <ion-toolbar>
+                <ion-searchbar @ionInput="handleSearch" placeholder="Filter Medewerkers"></ion-searchbar>
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
@@ -25,10 +38,13 @@
 </template>
   
 <script setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, onIonViewWillEnter, IonSelect, IonSelectOption } from '@ionic/vue';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonList, onIonViewWillEnter, IonSelect, IonSelectOption, IonSearchbar, IonButton, IonIcon, IonRow, IonCol } from '@ionic/vue';
 import { ref, inject } from 'vue';
 import ProjectMedewerkerItem from '@/components/ProjectMedewerkerItem.vue';
+import { chevronBackOutline } from 'ionicons/icons';
 
+
+const allMedewerkers = ref([]);
 const medewerkers = ref([]);
 
 const axios = inject('axios');
@@ -119,9 +135,24 @@ const getMedewerkers = async () => {
             isActive: activeMedewerkerIDs.includes(item.mw_id)
         }));
 
+        allMedewerkers.value = medewerkers.value;
         console.log(medewerkers);
     } catch (error) {
         console.error('Error tijdens het ophalen van medewerkers', error);
+    }
+};
+
+const handleSearch = (event) => {
+    const searchTerm = event.target.value.toLowerCase();
+    if (searchTerm === '') {
+        // If the search term is empty, restore the original list
+        medewerkers.value = allMedewerkers.value;
+    } else {
+        // Otherwise, perform the search
+        medewerkers.value = allMedewerkers.value.filter((medewerker) => {
+            const fullName = medewerker.mw_naam.toLowerCase();
+            return fullName.includes(searchTerm);
+        });
     }
 };
 
@@ -142,4 +173,16 @@ onIonViewWillEnter(() => {
     refreshMedewerkers();
 });
 </script>
+
+<style scoped>
+#topToolbarRow {
+    max-height: 50px;
+    margin-top: -10px;
+}
+
+#backButton {
+    /* max-width: 50px; */
+    margin-left: -10px;
+}
+</style>
   

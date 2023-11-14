@@ -3,7 +3,7 @@
     <ion-header>
       <ion-toolbar>
         <ion-title slot="start">Projecten</ion-title>
-        <ion-button slot="end" fill="clear" color="secondary" @click="openModal">
+        <ion-button slot="end" fill="clear" color="success" @click="openModal">
           Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
         </ion-button>
       </ion-toolbar>

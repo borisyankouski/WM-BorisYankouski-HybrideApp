@@ -4,7 +4,7 @@
             <ion-row>
                 <ion-col>
                     <ion-card-title>{{ pr_naam }}</ion-card-title>
-                    <ion-card-subtitle>{{ pr_code }}</ion-card-subtitle>
+                    <ion-card-subtitle color="secondary">{{ pr_code }}</ion-card-subtitle>
                 </ion-col>
                 <ion-col size="2">
                     <ion-button fill="clear" aria-label="manage" @click="openProjectModal">
