@@ -43,58 +43,6 @@ const getProjectCode = () => {
     return selectedProject ? selectedProject.pr_code : ''; // Assuming pr_code is the property you want to display
 };
 
-const getActiveMedewerkerIDs = () => {
-    console.log(selectedProjectID.value);
-    axios
-        .get('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTMEDEWERKERS.php', {
-            params: {
-                pr_id: selectedProjectID.value
-            }
-        })
-        .then(response => {
-            console.log(response.data.data);
-            if (response.status !== 200) {
-                console.log('Error tijdens het ophalen van medewerkers' + response.status)
-            }
-            if (!response.data.data) {
-                console.log('response.data.data is niet OK');
-                return;
-            }
-            console.log(response.data);
-            for (let i = 0, end = response.data.data.length; i < end; i++) {
-                activeMedewerkerIDs.push(response.data.data[i].mw_id);
-            }
-            console.log(activeMedewerkerIDs);
-        });
-};
-
-const getMedewerkers = () => {
-    axios
-        .get('https://www.kovskib.com/MW/RESTfulAPI/api/MEDEWERKERS.php')
-        .then(response => {
-            console.log(response.data.data);
-            if (response.status !== 200) {
-                console.log('Error tijdens het ophalen van medewerkers' + response.status)
-            }
-            if (!response.data.data) {
-                console.log('response.data.data is niet OK');
-                return;
-            }
-            console.log(response.data);
-            for (let i = 0, end = response.data.data.length; i < end; i++) {
-                const medewerker = {
-                    mw_id: response.data.data[i].mw_id,
-                    mw_naam: response.data.data[i].mw_voornaam + ' ' + response.data.data[i].mw_familienaam,
-                    sp_naam: response.data.data[i].sp_naam,
-                    listIndex: i + 1,
-                    isActive: activeMedewerkerIDs.includes(response.data.data[i].mw_id)
-                }
-                medewerkers.value.push(medewerker);
-            }
-            console.log(medewerkers);
-        });
-};
-
 const getProjecten = () => {
     axios
         .get('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTEN.php')
@@ -113,22 +61,81 @@ const getProjecten = () => {
         });
 };
 
-const selectionChanged = () => {
-    refreshMedewerkers();
+const getActiveMedewerkerIDs = async () => {
+    console.log(selectedProjectID.value);
+    try {
+        const response = await axios.get('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTMEDEWERKERS.php', {
+            params: {
+                pr_id: selectedProjectID.value
+            }
+        });
+
+        console.log(response.data.data);
+
+        if (response.status !== 200) {
+            console.log('Error tijdens het ophalen van medewerkers' + response.status);
+            return;
+        }
+
+        if (!response.data.data) {
+            console.log('response.data.data is niet OK');
+            return;
+        }
+
+        console.log(response.data);
+        activeMedewerkerIDs = response.data.data.map(item => item.mw_id);
+        console.log(activeMedewerkerIDs);
+    } catch (error) {
+        console.error('Error tijdens het ophalen van medewerkers', error);
+    }
 };
 
-const refreshMedewerkers = () => {
+const getMedewerkers = async () => {
+    try {
+        const response = await axios.get('https://www.kovskib.com/MW/RESTfulAPI/api/MEDEWERKERS.php');
+
+        console.log(response.data.data);
+
+        if (response.status !== 200) {
+            console.log('Error tijdens het ophalen van medewerkers' + response.status);
+            return;
+        }
+
+        if (!response.data.data) {
+            console.log('response.data.data is niet OK');
+            return;
+        }
+
+        console.log(response.data);
+
+        medewerkers.value = response.data.data.map((item, index) => ({
+            mw_id: item.mw_id,
+            mw_naam: item.mw_voornaam + ' ' + item.mw_familienaam,
+            sp_naam: item.sp_naam,
+            listIndex: index + 1,
+            isActive: activeMedewerkerIDs.includes(item.mw_id)
+        }));
+
+        console.log(medewerkers);
+    } catch (error) {
+        console.error('Error tijdens het ophalen van medewerkers', error);
+    }
+};
+
+const refreshMedewerkers = async () => {
     activeMedewerkerIDs = [];
-    getActiveMedewerkerIDs();
+    await getActiveMedewerkerIDs();
     medewerkers.value = [];
-    getMedewerkers();
+    await getMedewerkers();
+};
+
+const selectionChanged = () => {
+    refreshMedewerkers();
 };
 
 onIonViewWillEnter(() => {
     getProjecten();
     refreshMedewerkers();
-    // getActiveMedewerkerIDs();
-    // getMedewerkers();
 });
 
 eventBus.on('updateSelectedProjectID', (newProjectID) => {
