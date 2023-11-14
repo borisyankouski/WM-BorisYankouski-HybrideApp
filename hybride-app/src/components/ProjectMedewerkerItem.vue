@@ -13,12 +13,13 @@
             </ion-label>
         </ion-toggle>
     </ion-item>
-    <ion-toast :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="1000"></ion-toast>
+    <ion-toast :translucent="true" :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="1000"></ion-toast>
 </template>
 
 <script setup>
 import { defineProps, inject, ref } from 'vue';
 import { IonItem, IonToggle, IonLabel, IonNote, IonRow, IonToast } from '@ionic/vue';
+import { trashOutline, cloudUploadOutline, addCircleOutline, addCircle } from 'ionicons/icons';
 const { mw_naam, sp_naam, mw_id, pr_id, listIndex, isActive } = defineProps(['mw_naam', 'sp_naam', 'mw_id', 'pr_id', 'listIndex', 'isActive']);
 const isActiveEmployee = ref(isActive);
 
@@ -38,9 +39,13 @@ const toggleChanged = (event) => {
 const openToast = (type) => {
     const toastInstance = document.getElementById('open-toast');
     if (type == 'post') {
-        toastInstance.message = `${mw_naam} toegevoegd aan project!`
-    } else if ( type == 'delete') {
-        toastInstance.message = `${mw_naam} verwijderd van project!`
+        toastInstance.icon = addCircleOutline;
+        toastInstance.cssClass = 'addToast';
+        toastInstance.message = `${mw_naam} toegevoegd aan project!`;
+    } else if (type == 'delete') {
+        toastInstance.icon = trashOutline;
+        toastInstance.cssClass = 'deleteToast';
+        toastInstance.message = `${mw_naam} verwijderd van project!`;
     }
     if (toastInstance) {
         toastInstance.present();
@@ -79,3 +84,13 @@ const removeMedewerkerFromProject = (mw_id, pr_id) => {
         });
 };
 </script>
+
+<style scoped>
+.addToast::part(icon) {
+    color: #2fdf75;
+}
+
+.deleteToast::part(icon) {
+    color: #ff4961;
+}
+</style>

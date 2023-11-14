@@ -29,9 +29,9 @@
 
       <ProjectCard v-for="project in projecten" :key="project.pr_id" :pr_naam="project.pr_naam" :pr_code="project.pr_code"
         :pr_omschrijving="project.pr_omschrijving" :pr_id="project.pr_id" @projectenUpdated="refreshProjecten" />
-      <ProjectModal :isModalOpen="isModalOpen" :projectDetails="null" :title="'Project Toevoegen'" :type="'post'"
+      <ProjectModal :isModalOpen="isModalOpen" :breakpoints="[0,0,0,0]" :projectDetails="null" :title="'Project Toevoegen'" :type="'post'"
         @closeModal="closeModal" @projectenUpdated="refreshProjecten" @projectAdded="openToast" />
-      <ion-toast :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="2000"></ion-toast>
+      <ion-toast :translucent="true" :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="2000" :icon="addCircleOutline" cssClass="addToast"></ion-toast>
     </ion-content>
   </ion-page>
 </template>
@@ -107,5 +107,9 @@ const closeModal = () => {
 <style scoped>
 #collapseNieuwButton {
   margin-top: 6px;
+}
+
+.addToast::part(icon) {
+    color: #2fdf75;
 }
 </style>

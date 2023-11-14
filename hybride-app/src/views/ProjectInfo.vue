@@ -10,7 +10,7 @@
                     </ion-col>
 
                     <ion-col>
-                        <ion-select v-model="selectedProjectID" aria-label="Project Code" interface="action-sheet"
+                        <ion-select v-model="selectedProjectID" :interface-options="{ translucent: true, header: 'Kies project' }" aria-label="Project Code" interface="action-sheet"
                             label-placement="floating" @ionChange="selectionChanged">
                             <ion-select-option v-for="project in projecten" :value="project.pr_id">{{ project.pr_naam
                             }}</ion-select-option>

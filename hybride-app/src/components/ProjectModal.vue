@@ -10,7 +10,7 @@
                 </ion-buttons>
             </ion-toolbar>
         </ion-header>
-        <ion-content style="margin-top: auto; margin-bottom: auto;">
+        <ion-content class="ion-padding">
             <ion-item>
                 <ion-input v-model="projectNaam" label-placement="floating" placeholder="Alphabet Project">
                     <div slot="label">Naam <ion-text color="danger">(Verplicht)</ion-text></div>
@@ -23,9 +23,9 @@
                 </ion-input>
             </ion-item>
 
-            <ion-item style="min-height: 100px;">
+            <ion-item style="min-height: 120px;">
                 <ion-label position="floating">Omschrijving</ion-label>
-                <ion-textarea style="min-height: 100px;" v-model="projectOmschrijving"
+                <ion-textarea style="min-height: 120px;" v-model="projectOmschrijving"
                     placeholder="Het Alphabet Project is een ambitieus initiatief gericht op het verbeteren van alfabetiseringsniveaus en taalvaardigheden in lokale gemeenschappen."></ion-textarea>
             </ion-item>
             <ion-button style="margin-top: 26px;" @click="submitForm" expand="full" color="success">Submit</ion-button>

@@ -25,9 +25,9 @@
                 Verwijder <ion-icon slot="end" :icon="trashOutline" color="danger"></ion-icon>
             </ion-button>
         </ion-row>
-        <ion-alert :trigger="'deleteProjectBtn_' + pr_id" v-model="deleteAlertVisible" header="Project Verwijderen"
-            message="Deze actie kan niet ongedaan worden!" :buttons="alertButtons"></ion-alert>
-        <ion-toast :id="'open-toast_' + pr_id" :message="'Project ' + pr_code + ' verwijderd!'"
+        <ion-alert :translucent="true" :trigger="'deleteProjectBtn_' + pr_id" v-model="deleteAlertVisible"
+            header="Project Verwijderen" message="Deze actie kan niet ongedaan worden!" :buttons="alertButtons"></ion-alert>
+        <ion-toast :translucent="true" :id="'open-toast_' + pr_id" :message="'Project ' + pr_code + ' verwijderd!'"
             :duration="2000"></ion-toast>
         <ProjectModal :isModalOpen="isModalOpen" :projectDetails="selectedProjectDetails" :title="'Project Aanpassen'"
             :type="'put'" @closeModal="closeModal" @projectenUpdated="refreshProjecten" @projectAdded="openUpdateToast" />
@@ -37,7 +37,7 @@
 <script setup>
 import { defineProps, defineEmits, inject, ref } from 'vue';
 import { IonCard, IonCardHeader, IonCardTitle, IonCardSubtitle, IonCardContent, IonButton, IonIcon, IonRow, IonCol, IonAlert, IonToast } from '@ionic/vue';
-import { cogOutline, createOutline, trashOutline } from 'ionicons/icons';
+import { cogOutline, createOutline, trashOutline, addOutline, cloudUploadOutline } from 'ionicons/icons';
 import ProjectModal from '@/components/ProjectModal.vue';
 
 const { pr_naam, pr_code, pr_omschrijving, pr_id } = defineProps(['pr_naam', 'pr_code', 'pr_omschrijving', 'pr_id']);
@@ -63,7 +63,9 @@ const openProjectModal = () => {
 const openDeleteToast = () => {
     const toastInstance = document.getElementById('open-toast_' + pr_id);
     if (toastInstance) {
+        toastInstance.icon = trashOutline;
         toastInstance.message = `Project ${pr_code} succesvol verwijderd!`;
+        toastInstance.cssClass = 'deleteToast';
         toastInstance.present();
     }
 };
@@ -71,7 +73,9 @@ const openDeleteToast = () => {
 const openUpdateToast = () => {
     const toastInstance = document.getElementById('open-toast_' + pr_id);
     if (toastInstance) {
+        toastInstance.icon = cloudUploadOutline;
         toastInstance.message = `Project ${pr_code} succesvol aangepast!`;
+        toastInstance.cssClass = 'addToast';
         toastInstance.present();
     }
 };
@@ -146,7 +150,8 @@ const closeModal = () => {
 }
 
 .alert-wrapper {
-    border: #f4f5f8 1px solid;
+    /* border: #92949c 1px solid; */
+    border: 0.55px solid rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.2);
 }
 
 .alert-button-role-cancel {
@@ -155,5 +160,13 @@ const closeModal = () => {
 
 .alertBtnConfirm {
     color: #eb445a !important;
+}
+
+.addToast::part(icon) {
+    color: #2fdf75;
+}
+
+.deleteToast::part(icon) {
+    color: #ff4961;
 }
 </style>
