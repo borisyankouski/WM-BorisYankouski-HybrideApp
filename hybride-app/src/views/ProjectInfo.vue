@@ -1,6 +1,6 @@
 <template>
     <ion-page>
-        <ion-header>
+        <ion-header :translucent="true">
             <ion-toolbar>
                 <ion-row id="topToolbarRow">
                     <ion-col size="1.5">
@@ -179,6 +179,7 @@ onIonViewWillEnter(() => {
 
 #backButton {
     margin-left: -10px;
+    margin-top: 0px;
 }
 </style>
   

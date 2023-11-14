@@ -1,13 +1,13 @@
 <template>
   <ion-page>
-    <ion-header>
-      <ion-toolbar>
+    <ion-header :translucent="true">
+      <ion-toolbar id="topToolbar">
         <ion-title slot="start">Projecten</ion-title>
-
-        <!-- <ion-searchbar @ionInput="handleSearch" placeholder="Zoek Projecten"></ion-searchbar> -->
-        <ion-button slot="end" fill="clear" color="success" @click="openModal">
-          Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
-        </ion-button>
+        <ion-buttons :collapse="true" slot="end">
+          <ion-button fill="clear" color="success" @click="openModal">
+            Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
       </ion-toolbar>
 
       <ion-toolbar>
@@ -19,22 +19,26 @@
       <ion-header collapse="condense">
         <ion-toolbar>
           <ion-title size="large">Projecten</ion-title>
+          <ion-buttons :collapse="true" id="collapseNieuwButton" slot="end">
+            <ion-button fill="clear" color="success" @click="openModal">
+              Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
         </ion-toolbar>
       </ion-header>
 
       <ProjectCard v-for="project in projecten" :key="project.pr_id" :pr_naam="project.pr_naam" :pr_code="project.pr_code"
-        :pr_omschrijving="project.pr_omschrijving" :pr_id="project.pr_id"
-        @projectenUpdated="refreshProjecten" />
-      <ProjectModal :isModalOpen="isModalOpen" :projectDetails="null" :title="'Project Toevoegen'" :type="'post'" @closeModal="closeModal"
-        @projectenUpdated="refreshProjecten" @projectAdded="openToast" />
+        :pr_omschrijving="project.pr_omschrijving" :pr_id="project.pr_id" @projectenUpdated="refreshProjecten" />
+      <ProjectModal :isModalOpen="isModalOpen" :projectDetails="null" :title="'Project Toevoegen'" :type="'post'"
+        @closeModal="closeModal" @projectenUpdated="refreshProjecten" @projectAdded="openToast" />
       <ion-toast :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="2000"></ion-toast>
     </ion-content>
   </ion-page>
 </template>
 
 <script setup>
-import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonIcon, onIonViewWillEnter, IonToast, IonSearchbar } from '@ionic/vue';
-import { addCircleOutline, search } from 'ionicons/icons';
+import { IonPage, IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonIcon, onIonViewWillEnter, IonToast, IonSearchbar } from '@ionic/vue';
+import { addCircleOutline } from 'ionicons/icons';
 import { ref, inject, defineEmits } from 'vue';
 import ProjectCard from '@/components/ProjectCard.vue';
 import ProjectModal from '@/components/ProjectModal.vue';
@@ -71,16 +75,16 @@ const openToast = () => {
 };
 
 const handleSearch = (event) => {
-    const searchTerm = event.target.value.toLowerCase();
-    if (searchTerm == '') {
-        projecten.value = allProjecten.value;
-    } else {
-        projecten.value = allProjecten.value.filter((project) => {
-            const projectNaam = project.pr_naam.toLowerCase();
-            const projectCode = project.pr_code.toLowerCase();
-            return (projectNaam.includes(searchTerm) || projectCode.includes(searchTerm));
-        });
-    }
+  const searchTerm = event.target.value.toLowerCase();
+  if (searchTerm == '') {
+    projecten.value = allProjecten.value;
+  } else {
+    projecten.value = allProjecten.value.filter((project) => {
+      const projectNaam = project.pr_naam.toLowerCase();
+      const projectCode = project.pr_code.toLowerCase();
+      return (projectNaam.includes(searchTerm) || projectCode.includes(searchTerm));
+    });
+  }
 };
 
 const refreshProjecten = () => {
@@ -99,3 +103,9 @@ const closeModal = () => {
   isModalOpen.value = false;
 };
 </script>
+
+<style scoped>
+#collapseNieuwButton {
+  margin-top: 6px;
+}
+</style>

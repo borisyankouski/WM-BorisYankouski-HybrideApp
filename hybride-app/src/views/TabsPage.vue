@@ -2,7 +2,7 @@
   <ion-page>
     <ion-tabs>
       <ion-router-outlet></ion-router-outlet>
-      <ion-tab-bar slot="bottom">
+      <ion-tab-bar slot="bottom" :translucent="true">
         <ion-tab-button tab="tab1" href="/tabs/tab1">
           <ion-icon aria-hidden="true" :icon="peopleOutline" />
           <ion-label>Medewerkers</ion-label>
