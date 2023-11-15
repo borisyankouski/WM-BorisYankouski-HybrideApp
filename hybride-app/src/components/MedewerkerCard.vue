@@ -148,17 +148,37 @@ const closeModal = () => {
     align-self: flex-end;
 }
 
+/* IOS offsets start */
+
+#cardHeader.ios {
+    padding-bottom: 0;
+}
+
+#editButton.ios {
+    margin-top: -12px;
+}
+
+#cardButtonsRow.ios {
+    padding-left: 6px;
+}
+
+/* IOS offsets end */
+
+/* MD offsets start */
+
 #cardHeader {
     padding-bottom: 0;
 }
 
 #editButton {
-    margin-top: -12px;
+    margin-top: -5px;
 }
 
 #cardButtonsRow {
-    padding-left: 6px;
+    padding-left: 4px;
 }
+
+/* MD offsets end */
 
 .alert-wrapper {
     border: 0.55px solid rgba(var(--ion-text-color-rgb, 0, 0, 0), 0.2);

@@ -150,22 +150,47 @@ const closeModal = () => {
     align-self: flex-end;
 }
 
-#editButton {
+/* IOS offsets start */
+
+#editButton.ios {
     margin-top: -12px;
 }
 
-#cardButtonsRow {
+#cardButtonsRow.ios {
     padding-left: 6px;
 }
 
-#projectCodeTxt {
+#projectCodeTxt.ios {
     padding-left: 1px;
 }
 
-#projectOmschrijvingTxt {
+#projectOmschrijvingTxt.ios {
     padding-left: 26px;
     padding-bottom: 3px;
 }
+
+/* IOS offsets end */
+
+/* MD offsets start */
+
+#editButton {
+    margin-top: -5px;
+}
+
+#cardButtonsRow {
+    padding-left: 4px;
+}
+
+#projectCodeTxt {
+    padding-left: 0px;
+}
+
+#projectOmschrijvingTxt {
+    padding-left: 21px;
+    padding-bottom: 3px;
+}
+
+/* MD offsets end */
 
 .alert-wrapper {
     /* border: #92949c 1px solid; */

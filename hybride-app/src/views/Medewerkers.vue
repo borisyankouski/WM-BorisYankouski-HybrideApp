@@ -3,7 +3,7 @@
     <ion-header :translucent="true">
       <ion-toolbar id="topToolbar">
         <ion-title slot="start">Medewerkers</ion-title>
-        <ion-buttons :collapse="true" slot="end">
+        <ion-buttons id="nieuwButton" :collapse="true" slot="end">
           <ion-button fill="clear" color="success" @click="openModal">
             Nieuw <ion-icon slot="end" :icon="addCircleOutline"></ion-icon>
           </ion-button>
@@ -110,6 +110,14 @@ const closeModal = () => {
 #collapseNieuwButton {
   margin-top: 6px;
   margin-right: 3px;
+}
+
+#nieuwButton.ios {
+  padding-right: 5px;
+}
+
+#nieuwButton {
+  padding-right: 4px;
 }
 
 .addToast::part(icon) {

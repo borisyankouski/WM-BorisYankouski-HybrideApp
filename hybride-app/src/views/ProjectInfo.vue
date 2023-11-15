@@ -9,7 +9,7 @@
                         </ion-button>
                     </ion-col>
 
-                    <ion-col>
+                    <ion-col id="selectCol">
                         <ion-select v-model="selectedProjectID" :interface-options="{ translucent: true, header: 'Kies project' }" aria-label="Project Code" interface="action-sheet"
                             label-placement="floating" @ionChange="selectionChanged">
                             <ion-select-option v-for="project in projecten" :value="project.pr_id">{{ project.pr_naam
@@ -167,13 +167,30 @@ onIonViewWillEnter(() => {
     margin-top: -10px;
 }
 
-#backButton {
+#selectCol.ios {
+    padding-right: 12px;
+}
+
+#selectCol {
+    padding-right: 7px;
+}
+
+#backButton.ios {
     margin-left: -10px;
     margin-top: 0px;
 }
 
-ion-searchbar {
+#backButton {
+    margin-left: -10px;
+    margin-top: 10px;
+}
+
+ion-searchbar.ios {
     padding-top: 3px;
+}
+
+ion-searchbar {
+    padding-top: 0px;
 }
 </style>
   

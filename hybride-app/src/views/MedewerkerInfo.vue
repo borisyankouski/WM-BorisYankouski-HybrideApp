@@ -9,7 +9,7 @@
                         </ion-button>
                     </ion-col>
 
-                    <ion-col>
+                    <ion-col id="selectCol">
                         <ion-select v-model="selectedMedewerkerID" :interface-options="{ translucent: true, header: 'Kies medewerker' }" aria-label="Medewerker Code" interface="action-sheet"
                             label-placement="floating" @ionChange="selectionChanged">
                             <ion-select-option v-for="medewerker in medewerkers" :value="medewerker.mw_id">{{ medewerker.mw_voornaam
@@ -126,7 +126,7 @@ const getProjecten = async () => {
             isActive: activeProjectIDs.includes(item.pr_id)
         }));
 
-        allProjecten.value = medewerkers.value;
+        allProjecten.value = projecten.value;
     } catch (error) {
         console.error('Error tijdens het ophalen van projecten', error);
     }
@@ -169,13 +169,30 @@ onIonViewWillEnter(() => {
     margin-top: -10px;
 }
 
-#backButton {
+#selectCol.ios {
+    padding-right: 12px;
+}
+
+#selectCol {
+    padding-right: 7px;
+}
+
+#backButton.ios {
     margin-left: -10px;
     margin-top: 0px;
 }
 
-ion-searchbar {
+#backButton {
+    margin-left: -10px;
+    margin-top: 10px;
+}
+
+ion-searchbar.ios {
     padding-top: 3px;
+}
+
+ion-searchbar {
+    padding-top: 0px;
 }
 </style>
   
