@@ -24,18 +24,22 @@
             </ion-item>
 
             <ion-item style="min-height: 120px;">
-                <ion-textarea label="Omschrijving" label-placement="floating" style="min-height: 120px;" v-model="projectOmschrijving"
+                <ion-textarea label="Omschrijving" label-placement="floating" style="min-height: 120px;"
+                    v-model="projectOmschrijving"
                     placeholder="Het Alphabet Project is een ambitieus initiatief gericht op het verbeteren van alfabetiseringsniveaus en taalvaardigheden in lokale gemeenschappen."></ion-textarea>
             </ion-item>
             <ion-button style="margin-top: 26px;" @click="submitForm" expand="full" color="success">Submit</ion-button>
+
+            <ion-toast :translucent="true" color="danger" :id="'open-fail-toast'" :message="'Vul alle velden in!'"
+                :duration="3000"></ion-toast>
         </ion-content>
     </ion-modal>
 </template>
   
 <script setup>
 import { ref, inject, onMounted, watch, defineProps, defineEmits } from 'vue';
-import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonItem, IonLabel, IonInput, IonText, IonTextarea, IonRow, IonCol, onIonViewDidEnter } from '@ionic/vue';
-import { closeCircleOutline } from 'ionicons/icons';
+import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonToast, IonIcon, IonContent, IonItem, IonLabel, IonInput, IonText, IonTextarea, IonRow, IonCol, onIonViewDidEnter } from '@ionic/vue';
+import { closeCircleOutline, alertCircleOutline } from 'ionicons/icons';
 
 const { isModalOpen, projectDetails, title, type } = defineProps(['isModalOpen', 'projectDetails', 'title', 'type']);
 const emit = defineEmits();
@@ -59,6 +63,20 @@ const updateValues = () => {
     projectOmschrijving.value = projectDetails ? projectDetails.pr_omschrijving : '';
 };
 
+const openToast = (type) => {
+    const toastInstance = document.getElementById('open-fail-toast');
+    if (type == 'regular') {
+        toastInstance.message = `Vul alle velden in!`;
+    }
+    else if (type == 'format') {
+        toastInstance.message = 'Project code moet formaat AB1234 zijn!';
+    }
+    toastInstance.icon = alertCircleOutline;
+    if (toastInstance) {
+        toastInstance.present();
+    }
+};
+
 onMounted(() => {
     updateValues();
 });
@@ -71,43 +89,52 @@ const closeModal = () => {
 };
 
 const submitForm = () => {
-    if (projectNaam.value.length < 1 || projectCode.value.length < 1) {
-        console.log('formchecking failed');
+    const projectCodePattern = /^[A-Za-z]{2}\d{4}$/;
+    const isProjectCodeValid = () => projectCodePattern.test(projectCode.value);
+    if (projectNaam.value.length < 1 || projectCode.value.length < 1 || !isProjectCodeValid()) {
+        if (!isProjectCodeValid) {
+            openToast('format');
+            console.log('format failed');
+        }
+        else {
+            console.log('formchecking failed');
+            openToast('regular');
+        }
         return;
     }
     if (type == 'post') {
-        postProject({pr_naam: projectNaam.value, pr_code: projectCode.value, pr_omschrijving: projectOmschrijving.value});
+        postProject({ pr_naam: projectNaam.value, pr_code: projectCode.value, pr_omschrijving: projectOmschrijving.value });
     }
     else if (type == 'put') {
-        putProject({pr_id: projectID.value, pr_naam: projectNaam.value, pr_code: projectCode.value, pr_omschrijving: projectOmschrijving.value});   
+        putProject({ pr_id: projectID.value, pr_naam: projectNaam.value, pr_code: projectCode.value, pr_omschrijving: projectOmschrijving.value });
     }
     closeModal();
 };
 
 const axios = inject('axios');
 const postProject = (project) => {
-  axios
-    .post('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTEN.php', project)
-    .then(response => {
-      if (response.status !== 200) {
-        console.log('Error tijdens het posten van project' + response.status)
-      }
-      console.log('Project added');
-      emit('projectAdded');
-      emit('projectenUpdated');
-    });
+    axios
+        .post('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTEN.php', project)
+        .then(response => {
+            if (response.status !== 200) {
+                console.log('Error tijdens het posten van project' + response.status)
+            }
+            console.log('Project added');
+            emit('projectAdded');
+            emit('projectenUpdated');
+        });
 }
 
 const putProject = (project) => {
-  axios
-    .put('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTEN.php', project)
-    .then(response => {
-      if (response.status !== 200) {
-        console.log('Error tijdens het updaten van project' + response.status)
-      }
-      console.log('Project updated');
-      emit('projectAdded');
-      emit('projectenUpdated');
-    });
+    axios
+        .put('https://www.kovskib.com/MW/RESTfulAPI/api/PROJECTEN.php', project)
+        .then(response => {
+            if (response.status !== 200) {
+                console.log('Error tijdens het updaten van project' + response.status)
+            }
+            console.log('Project updated');
+            emit('projectAdded');
+            emit('projectenUpdated');
+        });
 }
 </script>

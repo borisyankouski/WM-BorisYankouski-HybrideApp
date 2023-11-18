@@ -1,6 +1,6 @@
 <template>
   <ion-page>
-    <ion-header :translucent="true">
+    <ion-header mode="ios" :translucent="true">
       <ion-toolbar id="topToolbar">
         <ion-title slot="start">Medewerkers</ion-title>
         <ion-buttons id="nieuwButton" :collapse="true" slot="end">
@@ -11,7 +11,7 @@
       </ion-toolbar>
 
       <ion-toolbar>
-        <ion-searchbar @ionInput="handleSearch" :enterkeyhint="search" placeholder=" Zoeken"></ion-searchbar>
+        <ion-searchbar @ionInput="handleSearch" placeholder=" Zoeken"></ion-searchbar>
       </ion-toolbar>
 
     </ion-header>
@@ -27,12 +27,12 @@
         </ion-toolbar>
       </ion-header>
 
-      <MedewerkerCard v-for="medewerker in medewerkers" :key="medewerker.mw_id" :mw_voornaam="medewerker.mw_voornaam"
+      <MedewerkerCard mode="ios" v-for="medewerker in medewerkers" :key="medewerker.mw_id" :mw_voornaam="medewerker.mw_voornaam"
         :mw_familienaam="medewerker.mw_familienaam" :sp_naam="medewerker.sp_naam" :sp_id="medewerker.sp_id"
         :mw_id="medewerker.mw_id" @medewerkersUpdated="refreshMedewerkers" />
       <MedewerkerModal :isModalOpen="isModalOpen" :medewerkerDetails="null" :title="'Medewerker Toevoegen'" :type="'post'"
         @closeModal="closeModal" @medewerkersUpdated="refreshMedewerkers" @medewerkerAdded="openToast" />
-      <ion-toast :translucent="true" :id="'open-toast'" :message="'Medewerker succesvol toegevoegd!'" :duration="2000"
+      <ion-toast :translucent="true" :id="'medewerker-add-toast'" :message="'Medewerker succesvol toegevoegd!'" :duration="2000"
         :icon="addCircleOutline" cssClass="addToast"></ion-toast>
     </ion-content>
   </ion-page>
@@ -69,7 +69,7 @@ const getMedewerkers = () => {
 }
 
 const openToast = () => {
-  const toastInstance = document.getElementById('open-toast');
+  const toastInstance = document.getElementById('medewerker-add-toast');
   console.log(toastInstance);
   if (toastInstance) {
     toastInstance.present();

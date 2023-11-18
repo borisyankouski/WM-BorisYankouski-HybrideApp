@@ -13,7 +13,8 @@
             </ion-label>
         </ion-toggle>
     </ion-item>
-    <ion-toast :translucent="true" :id="'open-toast'" :message="'Medewerker succesvol toegevoegd!'" :duration="1000"></ion-toast>
+    <ion-toast :translucent="true" :id="'medewerkerproject-add-toast'" :icon="addCircleOutline" cssClass="addToast" :message="'Medewerker succesvol toegevoegd!'" :duration="1000"></ion-toast>
+    <ion-toast :translucent="true" :id="'medewerkerproject-remove-toast'" :icon="trashOutline" cssClass="deleteToast" :message="'Medewerker succesvol toegevoegd!'" :duration="1000"></ion-toast>
 </template>
 
 <script setup>
@@ -37,18 +38,14 @@ const toggleChanged = (event) => {
 };
 
 const openToast = (type) => {
-    const toastInstance = document.getElementById('open-toast');
+    const addToastInstance = document.getElementById('medewerkerproject-add-toast');
+    const removeToastInstance = document.getElementById('medewerkerproject-remove-toast');
     if (type == 'post') {
-        toastInstance.icon = addCircleOutline;
-        toastInstance.cssClass = 'addToast';
-        toastInstance.message = `${pr_code} toegevoegd aan medewerker!`;
+        addToastInstance.message = `${pr_code} toegevoegd aan medewerker!`;
+        addToastInstance.present();
     } else if (type == 'delete') {
-        toastInstance.icon = trashOutline;
-        toastInstance.cssClass = 'deleteToast';
-        toastInstance.message = `${pr_code} verwijderd van medewerker!`;
-    }
-    if (toastInstance) {
-        toastInstance.present();
+        removeToastInstance.message = `${pr_code} verwijderd van medewerker!`;
+        removeToastInstance.present();
     }
 };
 

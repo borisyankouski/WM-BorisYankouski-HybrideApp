@@ -20,7 +20,7 @@
                 </ion-row>
             </ion-toolbar>
             <ion-toolbar>
-                <ion-searchbar @ionInput="handleSearch" :enterkeyhint="search" placeholder=" Zoeken"></ion-searchbar>
+                <ion-searchbar @ionInput="handleSearch" placeholder=" Zoeken"></ion-searchbar>
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
@@ -29,7 +29,7 @@
                     <ion-title size="large">{{ getMedewerkerNaam() }}</ion-title>
                 </ion-toolbar>
             </ion-header>
-            <ion-list lines="full">
+            <ion-list lines="full" mode="ios">
                 <MedewerkerProjectItem v-for="project in projecten" :key="project.pr_id"
                     :pr_naam="project.pr_naam" :pr_code="project.pr_code" :mw_id="selectedMedewerkerID"
                     :pr_id="project.pr_id" :listIndex="project.listIndex" :isActive="project.isActive" />

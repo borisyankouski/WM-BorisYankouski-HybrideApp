@@ -33,14 +33,16 @@
             </ion-item>
 
             <ion-button style="margin-top: 26px;" @click="submitForm" expand="full" color="success">Submit</ion-button>
+
+            <ion-toast :translucent="true" color="danger" :id="'open-fail-toast'" :message="'Vul alle velden in!'" :duration="3000"></ion-toast>
         </ion-content>
     </ion-modal>
 </template>
   
 <script setup>
 import { ref, inject, onMounted, watch, defineProps, defineEmits } from 'vue';
-import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonItem, IonLabel, IonInput, IonText, IonTextarea, IonRow, IonCol, onIonViewDidEnter, IonSelect, IonSelectOption } from '@ionic/vue';
-import { closeCircleOutline } from 'ionicons/icons';
+import { IonModal, IonHeader, IonToolbar, IonTitle, IonButtons, IonButton, IonIcon, IonContent, IonItem, IonToast, IonLabel, IonInput, IonText, IonTextarea, IonRow, IonCol, onIonViewDidEnter, IonSelect, IonSelectOption } from '@ionic/vue';
+import { closeCircleOutline, alertCircleOutline } from 'ionicons/icons';
 
 const { isModalOpen, medewerkerDetails, title, type } = defineProps(['isModalOpen', 'medewerkerDetails', 'title', 'type']);
 const emit = defineEmits();
@@ -64,6 +66,16 @@ const updateValues = () => {
     specialisatieID.value = medewerkerDetails ? medewerkerDetails.sp_id : '';
 };
 
+const openToast = () => {
+    const toastInstance = document.getElementById('open-fail-toast');
+    toastInstance.icon = alertCircleOutline;
+    // toastInstance.cssClass = 'addToast';
+    toastInstance.message = `Vul alle velden in!`;
+    if (toastInstance) {
+        toastInstance.present();
+    }
+};
+
 onMounted(() => {
     getSpecialisaties();
     updateValues();
@@ -79,6 +91,7 @@ const closeModal = () => {
 const submitForm = () => {
     if (medewerkerVoornaam.value.length < 1 || medewerkerFamilienaam.value.length < 1 || specialisatieID.value < 1) {
         console.log('formchecking failed');
+        openToast();
         return;
     }
     if (type == 'post') {

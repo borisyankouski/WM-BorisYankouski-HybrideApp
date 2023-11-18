@@ -13,7 +13,8 @@
             </ion-label>
         </ion-toggle>
     </ion-item>
-    <ion-toast :translucent="true" :id="'open-toast'" :message="'Project succesvol toegevoegd!'" :duration="1000"></ion-toast>
+    <ion-toast :translucent="true" :id="'projectmedewerker-add-toast'" cssClass="addToast" :icon="addCircleOutline" :message="'Project succesvol toegevoegd!'" :duration="1000"></ion-toast>
+    <ion-toast :translucent="true" :id="'projectmedewerker-remove-toast'" cssClass="deleteToast" :icon="trashOutline" :message="'Project succesvol toegevoegd!'" :duration="1000"></ion-toast>
 </template>
 
 <script setup>
@@ -37,18 +38,14 @@ const toggleChanged = (event) => {
 };
 
 const openToast = (type) => {
-    const toastInstance = document.getElementById('open-toast');
+    const addToastInstance = document.getElementById('projectmedewerker-add-toast');
+    const removeToastInstance = document.getElementById('projectmedewerker-remove-toast');
     if (type == 'post') {
-        toastInstance.icon = addCircleOutline;
-        toastInstance.cssClass = 'addToast';
-        toastInstance.message = `${mw_naam} toegevoegd aan project!`;
+        addToastInstance.message = `${mw_naam} toegevoegd aan project!`;
+        addToastInstance.present();
     } else if (type == 'delete') {
-        toastInstance.icon = trashOutline;
-        toastInstance.cssClass = 'deleteToast';
-        toastInstance.message = `${mw_naam} verwijderd van project!`;
-    }
-    if (toastInstance) {
-        toastInstance.present();
+        removeToastInstance.message = `${mw_naam} verwijderd van project!`;
+        removeToastInstance.present();
     }
 };
 
