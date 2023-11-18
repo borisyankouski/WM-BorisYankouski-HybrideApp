@@ -1,0 +1,9 @@
+{
+  "appId": "com.kovskib",
+  "appName": "Hybride App",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "https"
+  },
+  "WindowsAndroidStudioPath": "C:\\Program Files\\Android\\Android Studio\\bin\\studio64.exe"
+}
