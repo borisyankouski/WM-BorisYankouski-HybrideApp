@@ -20,7 +20,7 @@
                 </ion-row>
             </ion-toolbar>
             <ion-toolbar>
-                <ion-searchbar @ionInput="handleSearch" placeholder=" Zoeken"></ion-searchbar>
+                <ion-searchbar id="medewerkerInfoSearch" @ionInput="handleSearch" placeholder=" Zoeken"></ion-searchbar>
             </ion-toolbar>
         </ion-header>
         <ion-content :fullscreen="true">
@@ -145,6 +145,11 @@ const handleSearch = (event) => {
     }
 };
 
+const clearSearchbar = () => {
+  const medewerkerInfoSearch = document.querySelector('#medewerkerInfoSearch');
+  medewerkerInfoSearch.value = '';
+}
+
 const refreshProjecten = async () => {
     activeProjectIDs = [];
     await getActiveProjectIDs();
@@ -154,6 +159,7 @@ const refreshProjecten = async () => {
 
 const selectionChanged = () => {
     refreshProjecten();
+    clearSearchbar();
 };
 
 onIonViewWillEnter(() => {

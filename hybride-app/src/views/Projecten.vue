@@ -11,7 +11,7 @@
       </ion-toolbar>
 
       <ion-toolbar>
-        <ion-searchbar @ionInput="handleSearch" placeholder=" Zoeken"></ion-searchbar>
+        <ion-searchbar id="projectSearch" @ionInput="handleSearch" placeholder=" Zoeken"></ion-searchbar>
       </ion-toolbar>
 
     </ion-header>
@@ -87,8 +87,14 @@ const handleSearch = (event) => {
   }
 };
 
+const clearSearchbar = () => {
+  const projectSearch = document.querySelector('#projectSearch');
+  projectSearch.value = '';
+}
+
 const refreshProjecten = () => {
   getProjecten();
+  clearSearchbar();
 };
 
 onIonViewWillEnter(() => {
