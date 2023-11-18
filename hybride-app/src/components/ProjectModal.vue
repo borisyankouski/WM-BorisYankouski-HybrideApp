@@ -91,14 +91,15 @@ const closeModal = () => {
 const submitForm = () => {
     const projectCodePattern = /^[A-Za-z]{2}\d{4}$/;
     const isProjectCodeValid = () => projectCodePattern.test(projectCode.value);
-    if (projectNaam.value.length < 1 || projectCode.value.length < 1 || !isProjectCodeValid()) {
-        if (!isProjectCodeValid) {
-            openToast('format');
-            console.log('format failed');
-        }
-        else {
+    let hasEmptyFields = projectNaam.value.length < 1 || projectCode.value.length < 1;
+    if (hasEmptyFields || !isProjectCodeValid()) {
+        if (hasEmptyFields) {
             console.log('formchecking failed');
             openToast('regular');
+        }
+        else if (!isProjectCodeValid()) {
+            openToast('format');
+            console.log('format failed');
         }
         return;
     }

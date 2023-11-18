@@ -28,7 +28,7 @@
                     <ion-title size="large">{{ getProjectCode() }}</ion-title>
                 </ion-toolbar>
             </ion-header>
-            <ion-list lines="full">
+            <ion-list mode="ios" lines="full">
                 <ProjectMedewerkerItem v-for="medewerker in medewerkers" :key="medewerker.mw_id"
                     :mw_naam="medewerker.mw_naam" :sp_naam="medewerker.sp_naam" :mw_id="medewerker.mw_id"
                     :pr_id="selectedProjectID" :listIndex="medewerker.listIndex" :isActive="medewerker.isActive" />

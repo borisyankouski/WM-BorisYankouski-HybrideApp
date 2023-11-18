@@ -82,9 +82,9 @@ const handleSearch = (event) => {
     medewerkers.value = allMedewerkers.value;
   } else {
     medewerkers.value = allMedewerkers.value.filter((medewerker) => {
-      const medewerkerVoornaam = medewerker.mw_voornaam.toLowerCase();
-      const medewerkerFamilienaam = medewerker.mw_familienaam.toLowerCase();
-      return (medewerkerVoornaam.includes(searchTerm) || medewerkerFamilienaam.includes(searchTerm));
+      const medewerkerNaam = medewerker.mw_voornaam.toLowerCase() + ' ' + medewerker.mw_familienaam.toLowerCase();
+      const medewerkerSpecialisatie = medewerker.sp_naam.toLowerCase();
+      return (medewerkerNaam.includes(searchTerm) || medewerkerSpecialisatie.includes(searchTerm));
     });
   }
 };
